@@ -275,7 +275,7 @@
     padding:10px;border-radius:var(--radius-sm);font-weight:600;font-size:0.88rem;
   }
   .subtask-hint{font-size:0.75rem;color:var(--ink-faint);margin-top:6px;line-height:1.4;}
-  .manual-fields.disabled{opacity:0.4;pointer-events:none;}
+  .manual-field.disabled{opacity:0.4;pointer-events:none;}
 
   /* Archive sheet */
   .archive-item{
@@ -330,8 +330,8 @@
   <h3 id="goalSheetTitle">New Goal</h3>
   <label>Name</label>
   <input type="text" id="goalName" placeholder="e.g. Save for bike" maxlength="60">
-  <div class="row2 manual-fields" id="manualFields">
-    <div>
+  <div class="row2">
+    <div class="manual-field" id="currentFieldWrap">
       <label>Current</label>
       <input type="number" id="goalAmount" placeholder="0" inputmode="decimal">
     </div>
@@ -347,7 +347,7 @@
   <label>Subtasks (optional)</label>
   <div id="subtaskEditorList"></div>
   <button type="button" class="subtask-add-btn" id="addSubtaskBtn">+ Add subtask</button>
-  <div class="subtask-hint">If you add subtasks, this goal's progress and percentage are calculated from them automatically — the Current/Target fields above are ignored.</div>
+  <div class="subtask-hint">Each subtask contributes its own % complete toward this goal's Target — e.g. a book you're halfway through counts as half a book. Target stays whatever you set above, no matter how many subtasks you've added so far.</div>
 
   <button class="sheet-submit" id="saveGoalBtn">Save Goal</button>
   <button class="sheet-cancel" id="cancelGoalBtn">Cancel</button>
@@ -503,28 +503,24 @@
     });
   }
 
-  function clampPct(g){
-    if(!g.max || g.max <= 0) return 0;
-    return Math.min(100, Math.max(0, (g.amount / g.max) * 100));
-  }
   function goalHasSubtasks(g){ return g.subtasks && g.subtasks.length > 0; }
   function subtaskPct(s){
     if(!s.max || s.max <= 0) return 0;
     return Math.min(100, Math.max(0, (s.amount / s.max) * 100));
   }
-  function goalPct(g){
+  function goalAmountEffective(g){
     if(goalHasSubtasks(g)){
-      const total = g.subtasks.reduce((s,x)=>s + subtaskPct(x), 0);
-      return total / g.subtasks.length;
+      return g.subtasks.reduce((sum, s) => sum + (subtaskPct(s) / 100), 0);
     }
-    return clampPct(g);
+    return g.amount;
+  }
+  function goalPct(g){
+    if(!g.max || g.max <= 0) return 0;
+    const amt = goalAmountEffective(g);
+    return Math.min(100, Math.max(0, (amt / g.max) * 100));
   }
   function goalCounterText(g){
-    if(goalHasSubtasks(g)){
-      const done = g.subtasks.filter(s=>s.max > 0 && s.amount >= s.max).length;
-      return `${done}/${g.subtasks.length}`;
-    }
-    return `${fmtNum(g.amount)}/${fmtNum(g.max)}`;
+    return `${fmtNum(goalAmountEffective(g))}/${fmtNum(g.max)}`;
   }
 
   function goalRow(g, cat){
@@ -673,7 +669,7 @@
     });
   }
   function updateManualFieldsState(){
-    document.getElementById('manualFields').classList.toggle('disabled', pendingSubtasks.length > 0);
+    document.getElementById('currentFieldWrap').classList.toggle('disabled', pendingSubtasks.length > 0);
   }
   document.getElementById('addSubtaskBtn').addEventListener('click', ()=>{
     pendingSubtasks.push({ id: uid(), name: "", amount: 0, max: 0 });
@@ -727,10 +723,10 @@
     const max = parseFloat(document.getElementById('goalMax').value) || 0;
     const categoryId = document.getElementById('goalCategory').value;
     if(!name){ toast("Give it a name"); return; }
+    if(max <= 0){ toast("Target must be more than 0"); return; }
     const subtasks = pendingSubtasks
       .filter(s => s.name && s.name.trim() && s.max > 0)
       .map(s => ({ id: s.id || uid(), name: s.name.trim(), amount: s.amount || 0, max: s.max }));
-    if(subtasks.length === 0 && max <= 0){ toast("Target must be more than 0"); return; }
     if(editingGoalId){
       const g = state.goals.find(x=>x.id===editingGoalId);
       Object.assign(g, {name, amount, max, categoryId, subtasks});
