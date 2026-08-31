@@ -261,6 +261,14 @@
     display:flex;align-items:center;justify-content:center;
   }
   .subquickadd-btn:active{background:#428650;}
+  .subminus-btn{
+    flex-shrink:0;width:30px;height:30px;border-radius:50%;
+    background:var(--bg-elev-2);color:var(--ink-dim);border:1px solid var(--line);
+    font-size:1.1rem;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .subminus-btn:active{color:var(--danger);}
+  .subtask-btns{display:flex;gap:6px;flex-shrink:0;}
 
   /* Subtask editor - inside goal sheet */
   .subtask-editor-row{display:flex;gap:8px;margin-top:8px;align-items:center;}
@@ -347,7 +355,6 @@
   <label>Subtasks (optional)</label>
   <div id="subtaskEditorList"></div>
   <button type="button" class="subtask-add-btn" id="addSubtaskBtn">+ Add subtask</button>
-  <div class="subtask-hint">Each subtask contributes its own % complete toward this goal's Target — e.g. a book you're halfway through counts as half a book. Target stays whatever you set above, no matter how many subtasks you've added so far.</div>
 
   <button class="sheet-submit" id="saveGoalBtn">Save Goal</button>
   <button class="sheet-cancel" id="cancelGoalBtn">Cancel</button>
@@ -435,14 +442,11 @@
     }
 
     const activeGoals = state.goals.filter(g=>!g.archived);
-    const totalPct = activeGoals.length ? Math.round(
-      activeGoals.reduce((s,g)=>s + goalPct(g), 0) / activeGoals.length
-    ) : 0;
-    const archivedCount = state.goals.length - activeGoals.length;
-    sub.textContent = `${state.categories.length} categor${state.categories.length===1?'y':'ies'} · ${activeGoals.length} goal${activeGoals.length===1?'':'s'} · ${totalPct}% avg`;
+    sub.textContent = `${state.categories.length} categor${state.categories.length===1?'y':'ies'} · ${activeGoals.length} goal${activeGoals.length===1?'':'s'}`;
 
     main.innerHTML = state.categories.map(cat => {
       const goals = activeGoals.filter(g => g.categoryId === cat.id);
+      const catPct = goals.length ? Math.round(goals.reduce((s,g)=>s + goalPct(g), 0) / goals.length) : null;
       const isCollapsed = collapsed.has(cat.id);
       return `
       <div class="category ${isCollapsed?'collapsed':''}" data-cat="${cat.id}">
@@ -452,7 +456,7 @@
             <h2>${escapeHtml(cat.name)}</h2>
           </div>
           <div style="display:flex;align-items:center;">
-            <span class="cat-count">${goals.length}</span>
+            <span class="cat-count">${goals.length}${catPct !== null ? ` · ${catPct}%` : ''}</span>
             <span class="chevron">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </span>
@@ -495,7 +499,14 @@
       el.addEventListener('click', (e)=>{
         e.stopPropagation();
         const [goalId, subId] = el.getAttribute('data-subinc').split('|');
-        bumpSubtask(goalId, subId);
+        bumpSubtask(goalId, subId, 1);
+      });
+    });
+    main.querySelectorAll('[data-subdec]').forEach(el=>{
+      el.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        const [goalId, subId] = el.getAttribute('data-subdec').split('|');
+        bumpSubtask(goalId, subId, -1);
       });
     });
     main.querySelectorAll('[data-archive]').forEach(el=>{
@@ -569,7 +580,10 @@
           <div class="subtask-bar-track"><div class="subtask-bar-fill" style="width:${pct}%;background:${cat.color}"></div></div>
           <div class="subtask-stats">${fmtNum(s.amount)}/${fmtNum(s.max)} · ${Math.round(pct)}%</div>
         </div>
-        <button class="subquickadd-btn" data-subinc="${goalId}|${s.id}">+</button>
+        <div class="subtask-btns">
+          <button class="subminus-btn" data-subdec="${goalId}|${s.id}">−</button>
+          <button class="subquickadd-btn" data-subinc="${goalId}|${s.id}">+</button>
+        </div>
       </div>`;
   }
 
@@ -588,12 +602,13 @@
     save();
   }
 
-  function bumpSubtask(goalId, subId){
+  function bumpSubtask(goalId, subId, dir){
     const g = state.goals.find(x=>x.id===goalId);
     if(!g) return;
     const s = g.subtasks.find(x=>x.id===subId);
     if(!s) return;
-    s.amount = Math.round((s.amount + 1) * 100) / 100;
+    s.amount = Math.round((s.amount + dir) * 100) / 100;
+    if(s.amount < 0) s.amount = 0;
     save();
   }
 
@@ -683,7 +698,8 @@
 
   function refreshCategorySelect(){
     const sel = document.getElementById('goalCategory');
-    sel.innerHTML = state.categories.map(c=>`<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
+    sel.innerHTML = `<option value="">—</option>` +
+      state.categories.map(c=>`<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
   }
 
   function openGoalSheet(goalId){
@@ -706,6 +722,7 @@
       document.getElementById('goalName').value = "";
       document.getElementById('goalAmount').value = "";
       document.getElementById('goalMax').value = "";
+      document.getElementById('goalCategory').value = "";
       pendingSubtasks = [];
     }
     renderSubtaskEditor();
@@ -724,6 +741,7 @@
     const categoryId = document.getElementById('goalCategory').value;
     if(!name){ toast("Give it a name"); return; }
     if(max <= 0){ toast("Target must be more than 0"); return; }
+    if(!categoryId){ toast("Choose a category"); return; }
     const subtasks = pendingSubtasks
       .filter(s => s.name && s.name.trim() && s.max > 0)
       .map(s => ({ id: s.id || uid(), name: s.name.trim(), amount: s.amount || 0, max: s.max }));
