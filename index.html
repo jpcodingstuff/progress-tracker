@@ -261,29 +261,19 @@
     display:flex;align-items:center;justify-content:center;
   }
   .subquickadd-btn:active{background:#428650;}
-  .subminus-btn{
-    flex-shrink:0;width:34px;height:34px;border-radius:50%;
-    background:var(--bg-elev-2);color:var(--ink-dim);border:1px solid var(--line);
-    font-size:1.2rem;font-weight:700;
-    display:flex;align-items:center;justify-content:center;
-  }
-  .subminus-btn:active{color:var(--accent);}
-  .subremove-btn{
-    flex-shrink:0;width:34px;height:34px;border-radius:50%;
-    background:var(--bg-elev-2);color:var(--danger);border:1px solid var(--line);
-    font-size:1.05rem;font-weight:700;
-    display:flex;align-items:center;justify-content:center;
-  }
-  .subremove-btn:active{background:var(--danger);color:#fff;}
-  .subtask-btns{display:flex;gap:8px;flex-shrink:0;}
 
   /* Subtask editor - inside goal sheet */
   .subtask-editor-row{display:flex;gap:8px;margin-top:8px;align-items:center;}
-  .subtask-editor-row input[type=text]{flex:2;}
-  .subtask-editor-row input[type=number]{flex:1;min-width:0;}
+  .subtask-editor-row input[type=text]{flex:1;}
   .subtask-editor-row .rm-btn{
-    flex-shrink:0;width:32px;height:32px;border-radius:50%;background:var(--bg-elev-2);
+    flex-shrink:0;width:32px;height:32px;border-radius:50%;background:var(--bg-elev);
     border:1px solid var(--line);color:var(--danger);font-size:1rem;
+  }
+  .subtask-editor-fields{display:flex;gap:8px;margin-top:6px;}
+  .subtask-editor-fields input[type=number]{flex:1;min-width:0;}
+  .subtask-editor-card{
+    background:var(--bg-elev-2);border:1px solid var(--line);border-radius:var(--radius-sm);
+    padding:10px;margin-top:10px;
   }
   .subtask-add-btn{
     margin-top:10px;width:100%;background:var(--bg-elev-2);border:1px dashed var(--line);color:var(--accent);
@@ -509,20 +499,6 @@
         bumpSubtask(goalId, subId, 1);
       });
     });
-    main.querySelectorAll('[data-subdec]').forEach(el=>{
-      el.addEventListener('click', (e)=>{
-        e.stopPropagation();
-        const [goalId, subId] = el.getAttribute('data-subdec').split('|');
-        bumpSubtask(goalId, subId, -1);
-      });
-    });
-    main.querySelectorAll('[data-subremove]').forEach(el=>{
-      el.addEventListener('click', (e)=>{
-        e.stopPropagation();
-        const [goalId, subId] = el.getAttribute('data-subremove').split('|');
-        removeSubtask(goalId, subId);
-      });
-    });
     main.querySelectorAll('[data-archive]').forEach(el=>{
       el.addEventListener('click', (e)=>{ e.stopPropagation(); archiveGoal(el.getAttribute('data-archive')); });
     });
@@ -594,11 +570,7 @@
           <div class="subtask-bar-track"><div class="subtask-bar-fill" style="width:${pct}%;background:${cat.color}"></div></div>
           <div class="subtask-stats">${fmtNum(s.amount)}/${fmtNum(s.max)} · ${Math.round(pct)}%</div>
         </div>
-        <div class="subtask-btns">
-          <button class="subminus-btn" data-subdec="${goalId}|${s.id}">−</button>
-          <button class="subquickadd-btn" data-subinc="${goalId}|${s.id}">+</button>
-          <button class="subremove-btn" data-subremove="${goalId}|${s.id}">×</button>
-        </div>
+        <button class="subquickadd-btn" data-subinc="${goalId}|${s.id}">+</button>
       </div>`;
   }
 
@@ -624,14 +596,6 @@
     if(!s) return;
     s.amount = Math.round((s.amount + dir) * 100) / 100;
     if(s.amount < 0) s.amount = 0;
-    save();
-  }
-
-  function removeSubtask(goalId, subId){
-    const g = state.goals.find(x=>x.id===goalId);
-    if(!g) return;
-    if(!confirm("Remove this subtask?")) return;
-    g.subtasks = g.subtasks.filter(s=>s.id!==subId);
     save();
   }
 
@@ -686,14 +650,22 @@
   function renderSubtaskEditor(){
     const box = document.getElementById('subtaskEditorList');
     box.innerHTML = pendingSubtasks.map((s, idx) => `
-      <div class="subtask-editor-row">
-        <input type="text" class="sub-name-input" data-idx="${idx}" placeholder="Subtask name" value="${escapeHtml(s.name)}" maxlength="60">
-        <input type="number" class="sub-max-input" data-idx="${idx}" placeholder="Target" inputmode="decimal" value="${s.max || ''}">
-        <button type="button" class="rm-btn" data-idx="${idx}">×</button>
+      <div class="subtask-editor-card">
+        <div class="subtask-editor-row">
+          <input type="text" class="sub-name-input" data-idx="${idx}" placeholder="Subtask name" value="${escapeHtml(s.name)}" maxlength="60">
+          <button type="button" class="rm-btn" data-idx="${idx}">×</button>
+        </div>
+        <div class="subtask-editor-fields">
+          <input type="number" class="sub-amount-input" data-idx="${idx}" placeholder="Current" inputmode="decimal" value="${s.amount || ''}">
+          <input type="number" class="sub-max-input" data-idx="${idx}" placeholder="Target" inputmode="decimal" value="${s.max || ''}">
+        </div>
       </div>
     `).join('');
     box.querySelectorAll('.sub-name-input').forEach(el=>{
       el.addEventListener('input', ()=>{ pendingSubtasks[el.dataset.idx].name = el.value; });
+    });
+    box.querySelectorAll('.sub-amount-input').forEach(el=>{
+      el.addEventListener('input', ()=>{ pendingSubtasks[el.dataset.idx].amount = parseFloat(el.value) || 0; });
     });
     box.querySelectorAll('.sub-max-input').forEach(el=>{
       el.addEventListener('input', ()=>{ pendingSubtasks[el.dataset.idx].max = parseFloat(el.value) || 0; });
