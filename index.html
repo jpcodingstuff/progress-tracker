@@ -82,7 +82,7 @@
   }
   .category.collapsed .chevron{transform:rotate(-90deg);}
   .category-body{
-    max-height:2000px;
+    max-height:4000px;
     transition:max-height 0.3s ease, opacity 0.2s ease;
     opacity:1;
   }
@@ -205,14 +205,6 @@
     width:100%;margin-top:10px;background:none;color:var(--ink-faint);
     border:none;padding:8px;font-size:0.9rem;
   }
-  .quickadd{
-    display:flex;gap:8px;margin-top:9px;
-  }
-  .quickadd button{
-    flex:1;background:var(--bg-elev-2);border:1px solid var(--line);color:var(--ink);
-    padding:8px;border-radius:8px;font-weight:600;font-size:0.9rem;
-  }
-  .quickadd input{flex:1.4;text-align:center;}
 
   .settings-menu{
     position:relative;flex-shrink:0;z-index:15;
@@ -223,7 +215,7 @@
   }
   .settings-panel{
     position:absolute;top:46px;right:0;background:var(--bg-elev-2);border:1px solid var(--line);
-    border-radius:var(--radius-sm);padding:6px;min-width:170px;
+    border-radius:var(--radius-sm);padding:6px;min-width:190px;
     box-shadow:0 8px 24px rgba(0,0,0,0.4);
     display:none;
     z-index:16;
@@ -251,9 +243,10 @@
     max-height:0;overflow:hidden;
     transition:max-height 0.3s ease, margin 0.3s ease;margin-top:0;
   }
-  .goal.sub-expanded .subtask-list{max-height:800px;margin-top:8px;}
+  .goal.sub-expanded .subtask-list{max-height:3000px;margin-top:8px;}
+  .subtask-row-wrap{border-top:1px solid var(--line);padding:8px 0;}
   .subtask-row{
-    display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line);
+    display:flex;align-items:center;gap:10px;
   }
   .subtask-info{flex:1;min-width:0;}
   .subtask-name{font-size:0.85rem;font-weight:500;margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -266,26 +259,62 @@
     display:flex;align-items:center;justify-content:center;
   }
   .subquickadd-btn:active{background:#428650;}
+  .microtoggle-btn{background:var(--bg-elev-2);color:var(--ink-dim);}
+  .microtoggle-btn svg{transition:transform 0.25s ease;}
+  .subtask-row-wrap.micro-expanded .microtoggle-btn svg{transform:rotate(180deg);}
 
-  /* Subtask editor - inside goal sheet */
-  .subtask-editor-row{display:flex;gap:8px;margin-top:8px;align-items:center;}
-  .subtask-editor-row input[type=text]{flex:1;}
-  .subtask-editor-row .rm-btn{
-    flex-shrink:0;width:32px;height:32px;border-radius:50%;background:var(--bg-elev);
-    border:1px solid var(--line);color:var(--danger);font-size:1rem;
+  /* Microtasks - main screen */
+  .microtask-list{
+    max-height:0;overflow:hidden;margin-left:14px;
+    transition:max-height 0.3s ease, margin 0.3s ease;margin-top:0;
   }
-  .subtask-editor-fields{display:flex;gap:8px;margin-top:6px;}
-  .subtask-editor-fields input[type=number]{flex:1;min-width:0;}
-  .subtask-editor-card{
+  .subtask-row-wrap.micro-expanded .microtask-list{max-height:2000px;margin-top:6px;}
+  .microtask-row{
+    display:flex;align-items:center;gap:8px;padding:6px 0;border-top:1px dashed var(--line);
+  }
+  .microtask-info{flex:1;min-width:0;}
+  .microtask-name{font-size:0.78rem;font-weight:500;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .microtask-bar-track{height:5px;border-radius:3px;background:var(--bg-elev);overflow:hidden;}
+  .microtask-bar-fill{height:100%;border-radius:3px;transition:width 0.3s ease;}
+  .microtask-stats{font-size:0.68rem;color:var(--ink-faint);margin-top:3px;font-family:"SF Mono",ui-monospace,Menlo,monospace;}
+  .microquickadd-btn{
+    flex-shrink:0;width:27px;height:27px;border-radius:50%;
+    background:#4C9A5B;color:#fff;border:none;font-size:1rem;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .microquickadd-btn:active{background:#428650;}
+
+  /* Subtask summary cards - inside Goal sheet */
+  .subtask-summary-card{
     background:var(--bg-elev-2);border:1px solid var(--line);border-radius:var(--radius-sm);
-    padding:10px;margin-top:10px;
+    padding:10px 12px;margin-top:10px;
+  }
+  .subtask-summary-top{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+  .subtask-summary-name{font-weight:600;font-size:0.9rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink);}
+  .subtask-summary-meta{font-size:0.76rem;color:var(--ink-faint);margin-top:4px;font-family:"SF Mono",ui-monospace,Menlo,monospace;}
+  .subtask-edit-btn{
+    margin-top:8px;width:100%;background:var(--bg-elev);border:1px solid var(--line);color:var(--accent);
+    padding:8px;border-radius:8px;font-weight:600;font-size:0.85rem;
+  }
+  .rm-btn{
+    flex-shrink:0;width:30px;height:30px;border-radius:50%;background:var(--bg-elev);
+    border:1px solid var(--line);color:var(--danger);font-size:1rem;
   }
   .subtask-add-btn{
     margin-top:10px;width:100%;background:var(--bg-elev-2);border:1px dashed var(--line);color:var(--accent);
     padding:10px;border-radius:var(--radius-sm);font-weight:600;font-size:0.88rem;
   }
-  .subtask-hint{font-size:0.75rem;color:var(--ink-faint);margin-top:6px;line-height:1.4;}
   .manual-field.disabled{opacity:0.4;pointer-events:none;}
+
+  /* Microtask editor cards - inside Subtask sheet */
+  .microtask-editor-card{
+    background:var(--bg-elev-2);border:1px solid var(--line);border-radius:var(--radius-sm);
+    padding:10px;margin-top:10px;
+  }
+  .microtask-editor-row{display:flex;gap:8px;align-items:center;}
+  .microtask-editor-row input[type=text]{flex:1;}
+  .microtask-editor-fields{display:flex;gap:8px;margin-top:6px;}
+  .microtask-editor-fields input[type=number]{flex:1;min-width:0;}
 
   /* Archive sheet */
   .archive-item{
@@ -301,6 +330,18 @@
   .archive-item-actions .restore{color:var(--accent);}
   .archive-item-actions .forget{color:var(--danger);}
   .archive-empty{color:var(--ink-faint);text-align:center;padding:30px 10px;font-size:0.88rem;}
+
+  /* Reorder sheet */
+  .reorder-item{display:flex;align-items:center;gap:10px;padding:11px 0;border-top:1px solid var(--line);}
+  .reorder-item:first-child{border-top:none;}
+  .reorder-name{flex:1;font-size:0.9rem;font-weight:500;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .reorder-btns{display:flex;gap:6px;flex-shrink:0;}
+  .reorder-btns button{
+    width:32px;height:32px;border-radius:8px;background:var(--bg-elev-2);border:1px solid var(--line);
+    color:var(--ink-dim);font-size:0.85rem;
+  }
+  .reorder-btns button:disabled{opacity:0.3;}
+  .reorder-btns button:not(:disabled):active{color:var(--accent);}
 </style>
 </head>
 <body>
@@ -317,6 +358,7 @@
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
     </button>
     <div class="settings-panel" id="settingsPanel">
+      <button id="reorderBtn">Reorder categories</button>
       <button id="archiveViewBtn">View archive</button>
       <button id="exportBtn">Export backup</button>
       <button id="importBtn">Import backup</button>
@@ -347,6 +389,7 @@
       <input type="number" id="goalMax" placeholder="Target" inputmode="decimal">
     </div>
   </div>
+  <input type="text" id="goalUnit" placeholder="Label (optional)" maxlength="20" style="margin-top:10px;">
   <label>Category</label>
   <select id="goalCategory"></select>
   <span class="newcat-toggle" id="inlineNewCat">+ create new category</span>
@@ -357,6 +400,29 @@
 
   <button class="sheet-submit" id="saveGoalBtn">Save Goal</button>
   <button class="sheet-cancel" id="cancelGoalBtn">Cancel</button>
+</div>
+
+<!-- Subtask sheet (stacks on top of Goal sheet) -->
+<div class="sheet" id="subtaskSheet">
+  <div class="sheet-handle"></div>
+  <h3>Edit Subtask</h3>
+  <input type="text" id="subName" placeholder="Name" maxlength="60">
+  <div class="row2">
+    <div class="manual-field" id="subCurrentFieldWrap">
+      <input type="number" id="subAmount" placeholder="Current" inputmode="decimal">
+    </div>
+    <div>
+      <input type="number" id="subMax" placeholder="Target" inputmode="decimal">
+    </div>
+  </div>
+  <input type="text" id="subUnit" placeholder="Label (optional)" maxlength="20" style="margin-top:10px;">
+
+  <label>Microtasks (optional)</label>
+  <div id="microtaskEditorList"></div>
+  <button type="button" class="subtask-add-btn" id="addMicrotaskBtn">+ Add microtask</button>
+
+  <button class="sheet-submit" id="saveSubtaskBtn">Save Subtask</button>
+  <button class="sheet-cancel" id="cancelSubtaskBtn">Cancel</button>
 </div>
 
 <!-- Category sheet -->
@@ -379,6 +445,14 @@
   <button class="sheet-cancel" id="closeArchiveBtn">Close</button>
 </div>
 
+<!-- Reorder sheet -->
+<div class="sheet" id="reorderSheet">
+  <div class="sheet-handle"></div>
+  <h3>Reorder Categories</h3>
+  <div id="reorderList"></div>
+  <button class="sheet-cancel" id="closeReorderBtn">Done</button>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -391,19 +465,32 @@
   let state = load();
   let collapsed = new Set(JSON.parse(localStorage.getItem(COLLAPSE_KEY) || "[]"));
   let subtasksExpanded = new Set();
+  let microtasksExpanded = new Set();
   let editingGoalId = null;
+  let editingSubtaskIndex = null;
   let pendingCategoryColor = PALETTE[0];
   let pendingSubtasks = [];
+  let pendingMicrotasks = [];
+
+  function normalizeGoal(g){
+    if(!g.subtasks) g.subtasks = [];
+    if(g.archived === undefined) g.archived = false;
+    if(g.unit === undefined) g.unit = "";
+    g.subtasks.forEach(s=>{
+      if(!s.microtasks) s.microtasks = [];
+      if(s.unit === undefined) s.unit = "";
+      s.microtasks.forEach(m=>{
+        if(m.unit === undefined) m.unit = "";
+      });
+    });
+  }
 
   function load(){
     try{
       const raw = localStorage.getItem(STORAGE_KEY);
       if(raw){
         const data = JSON.parse(raw);
-        (data.goals||[]).forEach(g=>{
-          if(!g.subtasks) g.subtasks = [];
-          if(g.archived === undefined) g.archived = false;
-        });
+        (data.goals||[]).forEach(normalizeGoal);
         return data;
       }
     }catch(e){}
@@ -498,7 +585,22 @@
       el.addEventListener('click', (e)=>{
         e.stopPropagation();
         const [goalId, subId] = el.getAttribute('data-subinc').split('|');
-        bumpSubtask(goalId, subId, 1);
+        bumpSubtask(goalId, subId);
+      });
+    });
+    main.querySelectorAll('[data-microtoggle]').forEach(el=>{
+      el.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        const id = el.getAttribute('data-microtoggle');
+        if(microtasksExpanded.has(id)) microtasksExpanded.delete(id); else microtasksExpanded.add(id);
+        el.closest('.subtask-row-wrap').classList.toggle('micro-expanded');
+      });
+    });
+    main.querySelectorAll('[data-microinc]').forEach(el=>{
+      el.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        const [goalId, subId, microId] = el.getAttribute('data-microinc').split('|');
+        bumpMicrotask(goalId, subId, microId);
       });
     });
     main.querySelectorAll('[data-archive]').forEach(el=>{
@@ -506,11 +608,35 @@
     });
   }
 
+  // ---------- Progress math (goal -> subtask -> microtask) ----------
+  function clampPct(v){ return Math.min(100, Math.max(0, v)); }
+  function unitSuffix(u){ return (u && String(u).trim()) ? ' ' + String(u).trim() : ''; }
+
   function goalHasSubtasks(g){ return g.subtasks && g.subtasks.length > 0; }
+  function subtaskHasMicrotasks(s){ return s.microtasks && s.microtasks.length > 0; }
+
+  function microtaskPct(m){
+    if(!m.max || m.max <= 0) return 0;
+    return clampPct((m.amount / m.max) * 100);
+  }
+  function microtaskCounterText(m){
+    return `${fmtNum(m.amount)}/${fmtNum(m.max)}${unitSuffix(m.unit)}`;
+  }
+
+  function subtaskAmountEffective(s){
+    if(subtaskHasMicrotasks(s)){
+      return s.microtasks.reduce((sum, m) => sum + (microtaskPct(m) / 100), 0);
+    }
+    return s.amount;
+  }
   function subtaskPct(s){
     if(!s.max || s.max <= 0) return 0;
-    return Math.min(100, Math.max(0, (s.amount / s.max) * 100));
+    return clampPct((subtaskAmountEffective(s) / s.max) * 100);
   }
+  function subtaskCounterText(s){
+    return `${fmtNum(subtaskAmountEffective(s))}/${fmtNum(s.max)}${unitSuffix(s.unit)}`;
+  }
+
   function goalAmountEffective(g){
     if(goalHasSubtasks(g)){
       return g.subtasks.reduce((sum, s) => sum + (subtaskPct(s) / 100), 0);
@@ -519,13 +645,13 @@
   }
   function goalPct(g){
     if(!g.max || g.max <= 0) return 0;
-    const amt = goalAmountEffective(g);
-    return Math.min(100, Math.max(0, (amt / g.max) * 100));
+    return clampPct((goalAmountEffective(g) / g.max) * 100);
   }
   function goalCounterText(g){
-    return `${fmtNum(goalAmountEffective(g))}/${fmtNum(g.max)}`;
+    return `${fmtNum(goalAmountEffective(g))}/${fmtNum(g.max)}${unitSuffix(g.unit)}`;
   }
 
+  // ---------- Row templates ----------
   function goalRow(g, cat){
     const pct = goalPct(g);
     const displayPct = Math.round(pct);
@@ -565,14 +691,40 @@
 
   function subtaskRow(goalId, s, cat){
     const pct = subtaskPct(s);
+    const hasMicro = subtaskHasMicrotasks(s);
+    const expanded = microtasksExpanded.has(s.id);
     return `
-      <div class="subtask-row">
-        <div class="subtask-info">
-          <div class="subtask-name">${escapeHtml(s.name)}</div>
-          <div class="subtask-bar-track"><div class="subtask-bar-fill" style="width:${pct}%;background:${cat.color}"></div></div>
-          <div class="subtask-stats">${fmtNum(s.amount)}/${fmtNum(s.max)} · ${Math.round(pct)}%</div>
+      <div class="subtask-row-wrap ${expanded?'micro-expanded':''}">
+        <div class="subtask-row">
+          <div class="subtask-info">
+            <div class="subtask-name">${escapeHtml(s.name)}</div>
+            <div class="subtask-bar-track"><div class="subtask-bar-fill" style="width:${pct}%;background:${cat.color}"></div></div>
+            <div class="subtask-stats">${subtaskCounterText(s)} · ${Math.round(pct)}%</div>
+          </div>
+          ${hasMicro
+            ? `<button class="subquickadd-btn microtoggle-btn" data-microtoggle="${s.id}">
+                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+               </button>`
+            : `<button class="subquickadd-btn" data-subinc="${goalId}|${s.id}">+</button>`
+          }
         </div>
-        <button class="subquickadd-btn" data-subinc="${goalId}|${s.id}">+</button>
+        ${hasMicro ? `
+        <div class="microtask-list">
+          ${s.microtasks.map(m => microtaskRow(goalId, s.id, m, cat)).join('')}
+        </div>` : ``}
+      </div>`;
+  }
+
+  function microtaskRow(goalId, subId, m, cat){
+    const pct = microtaskPct(m);
+    return `
+      <div class="microtask-row">
+        <div class="microtask-info">
+          <div class="microtask-name">${escapeHtml(m.name)}</div>
+          <div class="microtask-bar-track"><div class="microtask-bar-fill" style="width:${pct}%;background:${cat.color}"></div></div>
+          <div class="microtask-stats">${microtaskCounterText(m)} · ${Math.round(pct)}%</div>
+        </div>
+        <button class="microquickadd-btn" data-microinc="${goalId}|${subId}|${m.id}">+</button>
       </div>`;
   }
 
@@ -584,6 +736,7 @@
     return (s||"").replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   }
 
+  // ---------- Mutations ----------
   function bump(id){
     const g = state.goals.find(x=>x.id===id);
     if(!g) return;
@@ -591,13 +744,23 @@
     save();
   }
 
-  function bumpSubtask(goalId, subId, dir){
+  function bumpSubtask(goalId, subId){
     const g = state.goals.find(x=>x.id===goalId);
     if(!g) return;
     const s = g.subtasks.find(x=>x.id===subId);
     if(!s) return;
-    s.amount = Math.round((s.amount + dir) * 100) / 100;
-    if(s.amount < 0) s.amount = 0;
+    s.amount = Math.round((s.amount + 1) * 100) / 100;
+    save();
+  }
+
+  function bumpMicrotask(goalId, subId, microId){
+    const g = state.goals.find(x=>x.id===goalId);
+    if(!g) return;
+    const s = g.subtasks.find(x=>x.id===subId);
+    if(!s) return;
+    const m = s.microtasks.find(x=>x.id===microId);
+    if(!m) return;
+    m.amount = Math.round((m.amount + 1) * 100) / 100;
     save();
   }
 
@@ -629,11 +792,24 @@
     renderArchive();
   }
 
+  function moveCategory(id, dir){
+    const idx = state.categories.findIndex(c=>c.id===id);
+    const swapIdx = idx + dir;
+    if(idx === -1 || swapIdx < 0 || swapIdx >= state.categories.length) return;
+    const tmp = state.categories[idx];
+    state.categories[idx] = state.categories[swapIdx];
+    state.categories[swapIdx] = tmp;
+    save();
+    renderReorderList();
+  }
+
   // ---------- Sheets ----------
   const backdrop = document.getElementById('backdrop');
   const goalSheet = document.getElementById('goalSheet');
+  const subtaskSheet = document.getElementById('subtaskSheet');
   const catSheet = document.getElementById('catSheet');
   const archiveSheet = document.getElementById('archiveSheet');
+  const reorderSheet = document.getElementById('reorderSheet');
 
   function openSheet(sheet){
     backdrop.classList.add('open');
@@ -642,53 +818,135 @@
   function closeSheets(){
     backdrop.classList.remove('open');
     goalSheet.classList.remove('open');
+    subtaskSheet.classList.remove('open');
     catSheet.classList.remove('open');
     archiveSheet.classList.remove('open');
+    reorderSheet.classList.remove('open');
     editingGoalId = null;
+    editingSubtaskIndex = null;
   }
   backdrop.addEventListener('click', closeSheets);
 
-  // ---------- Subtask editor (inside goal sheet) ----------
+  // ---------- Subtask editor (summary list inside Goal sheet) ----------
   function renderSubtaskEditor(){
     const box = document.getElementById('subtaskEditorList');
-    box.innerHTML = pendingSubtasks.map((s, idx) => `
-      <div class="subtask-editor-card">
-        <div class="subtask-editor-row">
-          <input type="text" class="sub-name-input" data-idx="${idx}" placeholder="Subtask name" value="${escapeHtml(s.name)}" maxlength="60">
+    box.innerHTML = pendingSubtasks.map((s, idx) => {
+      const hasMicro = s.microtasks && s.microtasks.length > 0;
+      return `
+      <div class="subtask-summary-card">
+        <div class="subtask-summary-top">
+          <div class="subtask-summary-name">${escapeHtml(s.name) || 'Untitled subtask'}</div>
           <button type="button" class="rm-btn" data-idx="${idx}">×</button>
         </div>
-        <div class="subtask-editor-fields">
-          <input type="number" class="sub-amount-input" data-idx="${idx}" placeholder="Current" inputmode="decimal" value="${s.amount || ''}">
-          <input type="number" class="sub-max-input" data-idx="${idx}" placeholder="Target" inputmode="decimal" value="${s.max || ''}">
-        </div>
-      </div>
-    `).join('');
-    box.querySelectorAll('.sub-name-input').forEach(el=>{
-      el.addEventListener('input', ()=>{ pendingSubtasks[el.dataset.idx].name = el.value; });
-    });
-    box.querySelectorAll('.sub-amount-input').forEach(el=>{
-      el.addEventListener('input', ()=>{ pendingSubtasks[el.dataset.idx].amount = parseFloat(el.value) || 0; });
-    });
-    box.querySelectorAll('.sub-max-input').forEach(el=>{
-      el.addEventListener('input', ()=>{ pendingSubtasks[el.dataset.idx].max = parseFloat(el.value) || 0; });
-    });
+        <div class="subtask-summary-meta">${subtaskCounterText(s)}${hasMicro ? ` · ${s.microtasks.length} microtask${s.microtasks.length===1?'':'s'}` : ''}</div>
+        <button type="button" class="subtask-edit-btn" data-idx="${idx}">Edit subtask</button>
+      </div>`;
+    }).join('');
     box.querySelectorAll('.rm-btn').forEach(el=>{
       el.addEventListener('click', ()=>{
+        if(!confirm("Delete this subtask?")) return;
         pendingSubtasks.splice(parseInt(el.dataset.idx, 10), 1);
         renderSubtaskEditor();
         updateManualFieldsState();
       });
+    });
+    box.querySelectorAll('.subtask-edit-btn').forEach(el=>{
+      el.addEventListener('click', ()=> openSubtaskSheet(parseInt(el.dataset.idx, 10)));
     });
   }
   function updateManualFieldsState(){
     document.getElementById('currentFieldWrap').classList.toggle('disabled', pendingSubtasks.length > 0);
   }
   document.getElementById('addSubtaskBtn').addEventListener('click', ()=>{
-    pendingSubtasks.push({ id: uid(), name: "", amount: 0, max: 0 });
+    pendingSubtasks.push({ id: uid(), name: "", amount: 0, max: 0, unit: "", microtasks: [] });
     renderSubtaskEditor();
     updateManualFieldsState();
+    openSubtaskSheet(pendingSubtasks.length - 1);
+  });
+
+  // ---------- Subtask sheet (name/current/target/unit + its own microtasks) ----------
+  function openSubtaskSheet(idx){
+    editingSubtaskIndex = idx;
+    const s = pendingSubtasks[idx];
+    document.getElementById('subName').value = s.name;
+    document.getElementById('subAmount').value = s.amount || '';
+    document.getElementById('subMax').value = s.max || '';
+    document.getElementById('subUnit').value = s.unit || '';
+    pendingMicrotasks = (s.microtasks || []).map(m => ({...m}));
+    renderMicrotaskEditor();
+    updateSubManualFieldsState();
+    openSheet(subtaskSheet);
+    setTimeout(()=>document.getElementById('subName').focus(), 300);
+  }
+  function closeSubtaskSheet(){
+    subtaskSheet.classList.remove('open');
+    editingSubtaskIndex = null;
+  }
+  document.getElementById('cancelSubtaskBtn').addEventListener('click', closeSubtaskSheet);
+  document.getElementById('saveSubtaskBtn').addEventListener('click', ()=>{
+    const name = document.getElementById('subName').value.trim();
+    const amount = parseFloat(document.getElementById('subAmount').value) || 0;
+    const max = parseFloat(document.getElementById('subMax').value) || 0;
+    const unit = document.getElementById('subUnit').value.trim();
+    if(!name){ toast("Give it a name"); return; }
+    if(max <= 0){ toast("Target must be more than 0"); return; }
+    const microtasks = pendingMicrotasks
+      .filter(m => m.name && m.name.trim() && m.max > 0)
+      .map(m => ({ id: m.id || uid(), name: m.name.trim(), amount: m.amount || 0, max: m.max, unit: (m.unit||'').trim() }));
+    pendingSubtasks[editingSubtaskIndex] = {
+      id: pendingSubtasks[editingSubtaskIndex].id,
+      name, amount, max, unit, microtasks
+    };
+    renderSubtaskEditor();
+    closeSubtaskSheet();
+  });
+
+  // ---------- Microtask editor (inline inside Subtask sheet) ----------
+  function renderMicrotaskEditor(){
+    const box = document.getElementById('microtaskEditorList');
+    box.innerHTML = pendingMicrotasks.map((m, idx) => `
+      <div class="microtask-editor-card">
+        <div class="microtask-editor-row">
+          <input type="text" class="micro-name-input" data-idx="${idx}" placeholder="Name" value="${escapeHtml(m.name)}" maxlength="60">
+          <button type="button" class="rm-btn micro-rm-btn" data-idx="${idx}">×</button>
+        </div>
+        <div class="microtask-editor-fields">
+          <input type="number" class="micro-amount-input" data-idx="${idx}" placeholder="Current" inputmode="decimal" value="${m.amount || ''}">
+          <input type="number" class="micro-max-input" data-idx="${idx}" placeholder="Target" inputmode="decimal" value="${m.max || ''}">
+        </div>
+        <input type="text" class="micro-unit-input" data-idx="${idx}" placeholder="Label (optional)" value="${escapeHtml(m.unit||'')}" maxlength="20" style="margin-top:6px;">
+      </div>
+    `).join('');
+    box.querySelectorAll('.micro-name-input').forEach(el=>{
+      el.addEventListener('input', ()=>{ pendingMicrotasks[el.dataset.idx].name = el.value; });
+    });
+    box.querySelectorAll('.micro-amount-input').forEach(el=>{
+      el.addEventListener('input', ()=>{ pendingMicrotasks[el.dataset.idx].amount = parseFloat(el.value) || 0; });
+    });
+    box.querySelectorAll('.micro-max-input').forEach(el=>{
+      el.addEventListener('input', ()=>{ pendingMicrotasks[el.dataset.idx].max = parseFloat(el.value) || 0; });
+    });
+    box.querySelectorAll('.micro-unit-input').forEach(el=>{
+      el.addEventListener('input', ()=>{ pendingMicrotasks[el.dataset.idx].unit = el.value; });
+    });
+    box.querySelectorAll('.micro-rm-btn').forEach(el=>{
+      el.addEventListener('click', ()=>{
+        if(!confirm("Delete this microtask?")) return;
+        pendingMicrotasks.splice(parseInt(el.dataset.idx, 10), 1);
+        renderMicrotaskEditor();
+        updateSubManualFieldsState();
+      });
+    });
+  }
+  function updateSubManualFieldsState(){
+    document.getElementById('subCurrentFieldWrap').classList.toggle('disabled', pendingMicrotasks.length > 0);
+  }
+  document.getElementById('addMicrotaskBtn').addEventListener('click', ()=>{
+    pendingMicrotasks.push({ id: uid(), name: "", amount: 0, max: 0, unit: "" });
+    renderMicrotaskEditor();
+    updateSubManualFieldsState();
     setTimeout(()=>{
-      const inputs = document.querySelectorAll('.sub-name-input');
+      const inputs = document.querySelectorAll('.micro-name-input');
       if(inputs.length) inputs[inputs.length-1].focus();
     }, 50);
   });
@@ -713,12 +971,14 @@
       document.getElementById('goalName').value = g.name;
       document.getElementById('goalAmount').value = g.amount;
       document.getElementById('goalMax').value = g.max;
+      document.getElementById('goalUnit').value = g.unit || '';
       document.getElementById('goalCategory').value = g.categoryId;
       pendingSubtasks = (g.subtasks || []).map(s => ({...s}));
     } else {
       document.getElementById('goalName').value = "";
       document.getElementById('goalAmount').value = "";
       document.getElementById('goalMax').value = "";
+      document.getElementById('goalUnit').value = "";
       document.getElementById('goalCategory').value = "";
       pendingSubtasks = [];
     }
@@ -735,18 +995,22 @@
     const name = document.getElementById('goalName').value.trim();
     const amount = parseFloat(document.getElementById('goalAmount').value) || 0;
     const max = parseFloat(document.getElementById('goalMax').value) || 0;
+    const unit = document.getElementById('goalUnit').value.trim();
     const categoryId = document.getElementById('goalCategory').value;
     if(!name){ toast("Give it a name"); return; }
     if(max <= 0){ toast("Target must be more than 0"); return; }
     if(!categoryId){ toast("Choose a category"); return; }
     const subtasks = pendingSubtasks
       .filter(s => s.name && s.name.trim() && s.max > 0)
-      .map(s => ({ id: s.id || uid(), name: s.name.trim(), amount: s.amount || 0, max: s.max }));
+      .map(s => ({
+        id: s.id || uid(), name: s.name.trim(), amount: s.amount || 0, max: s.max,
+        unit: (s.unit||'').trim(), microtasks: s.microtasks || []
+      }));
     if(editingGoalId){
       const g = state.goals.find(x=>x.id===editingGoalId);
-      Object.assign(g, {name, amount, max, categoryId, subtasks});
+      Object.assign(g, {name, amount, max, unit, categoryId, subtasks});
     } else {
-      state.goals.push({ id: uid(), name, amount, max, categoryId, subtasks, archived: false });
+      state.goals.push({ id: uid(), name, amount, max, unit, categoryId, subtasks, archived: false });
     }
     save();
     closeSheets();
@@ -823,6 +1087,36 @@
   });
   document.getElementById('closeArchiveBtn').addEventListener('click', closeSheets);
 
+  // ---------- Reorder categories ----------
+  function renderReorderList(){
+    const box = document.getElementById('reorderList');
+    if(state.categories.length === 0){
+      box.innerHTML = `<div class="archive-empty">No categories yet.</div>`;
+      return;
+    }
+    box.innerHTML = state.categories.map((c, idx) => `
+      <div class="reorder-item">
+        <span class="cat-dot" style="background:${c.color}"></span>
+        <span class="reorder-name">${escapeHtml(c.name)}</span>
+        <div class="reorder-btns">
+          <button data-moveup="${c.id}" ${idx===0 ? 'disabled' : ''}>▲</button>
+          <button data-movedown="${c.id}" ${idx===state.categories.length-1 ? 'disabled' : ''}>▼</button>
+        </div>
+      </div>
+    `).join('');
+    box.querySelectorAll('[data-moveup]').forEach(el=>{
+      el.addEventListener('click', ()=> moveCategory(el.getAttribute('data-moveup'), -1));
+    });
+    box.querySelectorAll('[data-movedown]').forEach(el=>{
+      el.addEventListener('click', ()=> moveCategory(el.getAttribute('data-movedown'), 1));
+    });
+  }
+  document.getElementById('reorderBtn').addEventListener('click', ()=>{
+    renderReorderList();
+    openSheet(reorderSheet);
+  });
+  document.getElementById('closeReorderBtn').addEventListener('click', closeSheets);
+
   // ---------- Settings: export/import/clear ----------
   const settingsBtn = document.getElementById('settingsBtn');
   const settingsPanel = document.getElementById('settingsPanel');
@@ -860,10 +1154,7 @@
         if(state.categories.length || state.goals.length){
           if(!confirm("This replaces your current data with the backup. Continue?")) return;
         }
-        data.goals.forEach(g=>{
-          if(!g.subtasks) g.subtasks = [];
-          if(g.archived === undefined) g.archived = false;
-        });
+        data.goals.forEach(normalizeGoal);
         state = data;
         save();
         toast("Backup restored");
