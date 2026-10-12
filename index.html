@@ -373,6 +373,26 @@
   #confirmCancel{background:var(--bg-elev-2);color:var(--ink-dim);}
   #confirmOk{background:var(--danger);color:#fff;border-color:var(--danger);}
 
+  /* Move goals sheet */
+  #moveSheet{border-top:3px solid var(--accent);}
+  .move-tools{display:flex;gap:10px;margin:12px 0 4px;}
+  .move-tools button{
+    flex:1;background:var(--bg-elev-2);border:1px solid var(--line);color:var(--ink-dim);
+    padding:9px;border-radius:var(--radius-sm);font-size:0.85rem;font-weight:600;
+  }
+  .move-row{display:flex;align-items:center;gap:12px;padding:12px 4px;border-top:1px solid var(--line);cursor:pointer;user-select:none;}
+  .move-row:first-child{border-top:none;}
+  .move-check{
+    flex-shrink:0;width:26px;height:26px;border-radius:7px;border:2px solid var(--ink-faint);
+    display:flex;align-items:center;justify-content:center;color:transparent;font-size:0.95rem;font-weight:800;
+  }
+  .move-check.on{background:var(--accent);border-color:var(--accent);color:#1C1710;}
+  .move-info{flex:1;min-width:0;}
+  .move-name{font-size:0.95rem;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .move-cat{display:flex;align-items:center;gap:6px;font-size:0.75rem;color:var(--ink-faint);margin-top:2px;}
+  .move-cat .cat-dot{width:8px;height:8px;}
+  #moveSaveBtn:disabled{opacity:0.4;}
+
   /* Reorder sheet */
   .reorder-item{display:flex;align-items:center;gap:10px;padding:11px 0;border-top:1px solid var(--line);}
   .reorder-item:first-child{border-top:none;}
@@ -403,6 +423,7 @@
     </button>
     <div class="settings-panel" id="settingsPanel">
       <button id="reorderBtn">Manage categories</button>
+      <button id="moveBtn">Move goals</button>
       <button id="archiveViewBtn">View archive</button>
       <button id="exportBtn">Export backup</button>
       <button id="importBtn">Import backup</button>
@@ -525,6 +546,27 @@
   <h3>Manage Categories</h3>
   <div id="reorderList"></div>
   <button class="sheet-cancel" id="closeReorderBtn">Done</button>
+</div>
+
+<!-- Move goals sheet -->
+<div class="sheet has-footer" id="moveSheet">
+  <div class="sheet-handle"></div>
+  <h3>Move Goals</h3>
+  <div class="sheet-body">
+    <label>Show goals from</label>
+    <select id="moveFrom"></select>
+    <div class="move-tools">
+      <button type="button" id="moveSelectAll">Select all</button>
+      <button type="button" id="moveClear">Clear</button>
+    </div>
+    <div id="moveList"></div>
+    <label>Move selected to</label>
+    <select id="moveTo"></select>
+  </div>
+  <div class="sheet-footer">
+    <button class="sheet-submit" id="moveSaveBtn" disabled>Move selected</button>
+    <button class="sheet-cancel" id="closeMoveBtn">Done</button>
+  </div>
 </div>
 
 <div class="confirm-overlay" id="confirmOverlay">
@@ -960,6 +1002,7 @@
   const goalSheet = document.getElementById('goalSheet');
   const subtaskSheet = document.getElementById('subtaskSheet');
   const microtaskSheet = document.getElementById('microtaskSheet');
+  const moveSheet = document.getElementById('moveSheet');
   const catSheet = document.getElementById('catSheet');
   const archiveSheet = document.getElementById('archiveSheet');
   const reorderSheet = document.getElementById('reorderSheet');
@@ -973,6 +1016,7 @@
     goalSheet.classList.remove('open');
     subtaskSheet.classList.remove('open');
     microtaskSheet.classList.remove('open');
+    moveSheet.classList.remove('open');
     catSheet.classList.remove('open');
     archiveSheet.classList.remove('open');
     reorderSheet.classList.remove('open');
@@ -1334,6 +1378,88 @@
     openSheet(reorderSheet);
   });
   document.getElementById('closeReorderBtn').addEventListener('click', closeSheets);
+
+  // ---------- Move goals (bulk) ----------
+  let moveSelected = new Set();
+  function populateMoveSelects(){
+    const opts = state.categories.map(c=>`<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
+    const fromSel = document.getElementById('moveFrom');
+    const toSel = document.getElementById('moveTo');
+    const prevFrom = fromSel.value, prevTo = toSel.value;
+    fromSel.innerHTML = `<option value="">All categories</option>` + opts;
+    toSel.innerHTML = `<option value="">— Choose category —</option>` + opts;
+    fromSel.value = state.categories.some(c=>c.id===prevFrom) ? prevFrom : '';
+    toSel.value = state.categories.some(c=>c.id===prevTo) ? prevTo : '';
+  }
+  function visibleMoveGoals(){
+    const from = document.getElementById('moveFrom').value;
+    return state.goals.filter(g=>!g.archived && (!from || g.categoryId===from));
+  }
+  function updateMoveButton(){
+    const n = moveSelected.size;
+    const btn = document.getElementById('moveSaveBtn');
+    btn.textContent = n ? `Move ${n} selected` : 'Move selected';
+    btn.disabled = !n || !document.getElementById('moveTo').value;
+  }
+  function renderMoveList(){
+    const box = document.getElementById('moveList');
+    const goals = visibleMoveGoals();
+    moveSelected = new Set([...moveSelected].filter(id=>goals.some(g=>g.id===id)));
+    if(goals.length === 0){
+      box.innerHTML = `<div class="archive-empty">No goals here.</div>`;
+    } else {
+      box.innerHTML = goals.map(g=>{
+        const cat = state.categories.find(c=>c.id===g.categoryId);
+        return `
+        <div class="move-row" data-moveid="${g.id}">
+          <span class="move-check ${moveSelected.has(g.id)?'on':''}">✓</span>
+          <div class="move-info">
+            <div class="move-name">${escapeHtml(g.name)}</div>
+            <div class="move-cat"><span class="cat-dot" style="background:${cat?cat.color:'#888'}"></span>${cat?escapeHtml(cat.name):'No category'}</div>
+          </div>
+        </div>`;
+      }).join('');
+      box.querySelectorAll('[data-moveid]').forEach(el=>{
+        el.addEventListener('click', ()=>{
+          const id = el.getAttribute('data-moveid');
+          if(moveSelected.has(id)) moveSelected.delete(id); else moveSelected.add(id);
+          el.querySelector('.move-check').classList.toggle('on', moveSelected.has(id));
+          updateMoveButton();
+        });
+      });
+    }
+    updateMoveButton();
+  }
+  document.getElementById('moveBtn').addEventListener('click', ()=>{
+    moveSelected = new Set();
+    populateMoveSelects();
+    renderMoveList();
+    openSheet(moveSheet);
+  });
+  document.getElementById('moveFrom').addEventListener('change', ()=>{ moveSelected = new Set(); renderMoveList(); });
+  document.getElementById('moveTo').addEventListener('change', updateMoveButton);
+  document.getElementById('moveSelectAll').addEventListener('click', ()=>{
+    moveSelected = new Set(visibleMoveGoals().map(g=>g.id));
+    renderMoveList();
+  });
+  document.getElementById('moveClear').addEventListener('click', ()=>{
+    moveSelected = new Set();
+    renderMoveList();
+  });
+  document.getElementById('moveSaveBtn').addEventListener('click', ()=>{
+    const to = document.getElementById('moveTo').value;
+    const target = state.categories.find(c=>c.id===to);
+    if(!target || moveSelected.size === 0) return;
+    let n = 0;
+    state.goals.forEach(g=>{
+      if(moveSelected.has(g.id) && g.categoryId !== to){ g.categoryId = to; n++; }
+    });
+    moveSelected = new Set();
+    save();
+    renderMoveList();
+    toast(`Moved ${n} goal${n===1?'':'s'} to ${target.name}`);
+  });
+  document.getElementById('closeMoveBtn').addEventListener('click', closeSheets);
 
   // ---------- Settings: export/import/clear ----------
   const settingsBtn = document.getElementById('settingsBtn');
