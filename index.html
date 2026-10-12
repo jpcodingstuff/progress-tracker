@@ -1055,14 +1055,15 @@
     const name = document.getElementById('subName').value.trim();
     const amount = parseFloat(document.getElementById('subAmount').value) || 0;
     const subMaxRaw = document.getElementById('subMax').value.trim();
-    const max = subMaxRaw === '' ? 1 : (parseFloat(subMaxRaw) || 0);
     const unit = document.getElementById('subUnit').value.trim();
     if(!name){ toast("Give it a name"); return; }
-    if(max <= 0){ toast("Target must be more than 0"); return; }
     const microtasks = pendingMicrotasks
       .map(m => ({ ...m, max: (m.max === null || m.max === undefined) ? 1 : m.max }))
       .filter(m => m.name && m.name.trim() && m.max > 0)
       .map(m => ({ id: m.id || uid(), name: m.name.trim(), amount: m.amount || 0, max: m.max, unit: (m.unit||'').trim() }));
+    // Blank target = number of microtasks (1 if there are none)
+    const max = subMaxRaw === '' ? Math.max(1, microtasks.length) : (parseFloat(subMaxRaw) || 0);
+    if(max <= 0){ toast("Target must be more than 0"); return; }
     pendingSubtasks[editingSubtaskIndex] = {
       id: pendingSubtasks[editingSubtaskIndex].id,
       name, amount, max, unit, microtasks
@@ -1191,11 +1192,9 @@
     const name = document.getElementById('goalName').value.trim();
     const amount = parseFloat(document.getElementById('goalAmount').value) || 0;
     const goalMaxRaw = document.getElementById('goalMax').value.trim();
-    const max = goalMaxRaw === '' ? 1 : (parseFloat(goalMaxRaw) || 0);
     const unit = document.getElementById('goalUnit').value.trim();
     const categoryId = document.getElementById('goalCategory').value;
     if(!name){ toast("Give it a name"); return; }
-    if(max <= 0){ toast("Target must be more than 0"); return; }
     if(!categoryId){ toast("Choose a category"); return; }
     const subtasks = pendingSubtasks
       .filter(s => s.name && s.name.trim() && s.max > 0)
@@ -1203,6 +1202,9 @@
         id: s.id || uid(), name: s.name.trim(), amount: s.amount || 0, max: s.max,
         unit: (s.unit||'').trim(), microtasks: s.microtasks || []
       }));
+    // Blank target = number of subtasks (1 if there are none); microtasks are not counted here
+    const max = goalMaxRaw === '' ? Math.max(1, subtasks.length) : (parseFloat(goalMaxRaw) || 0);
+    if(max <= 0){ toast("Target must be more than 0"); return; }
     if(editingGoalId){
       const g = state.goals.find(x=>x.id===editingGoalId);
       Object.assign(g, {name, amount, max, unit, categoryId, subtasks});
