@@ -20,6 +20,10 @@
     --accent:#D4A24C;
     --accent-soft:#D4A24C33;
     --danger:#C0685A;
+    --sub:#4C9A5B;
+    --sub-press:#428650;
+    --micro:#4A90D9;
+    --micro-press:#3F7EC0;
     --radius:14px;
     --radius-sm:9px;
     font-size:16px;
@@ -127,12 +131,12 @@
   .goal-actions .del{color:var(--danger);opacity:0.75;}
   .quickadd-btn{
     flex-shrink:0;width:42px;height:42px;border-radius:50%;
-    background:#4C9A5B;color:#fff;border:none;
+    background:var(--accent);color:#1C1710;border:none;
     font-size:1.4rem;font-weight:700;line-height:1;
     display:flex;align-items:center;justify-content:center;
-    box-shadow:0 3px 10px rgba(76,154,91,0.35);
+    box-shadow:0 3px 10px rgba(212,162,76,0.35);
   }
-  .quickadd-btn:active{background:#428650;}
+  .quickadd-btn:active{background:#BF8F3F;}
 
   .fab-row{
     position:fixed;left:0;right:0;bottom:0;
@@ -165,6 +169,14 @@
     border-top:1px solid var(--line);
   }
   .sheet.open{transform:translateY(0);}
+  .sheet.has-footer{display:flex;flex-direction:column;overflow:hidden;padding-bottom:0;}
+  .sheet.has-footer .sheet-body{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px;}
+  .sheet.has-footer .sheet-footer{
+    flex-shrink:0;background:var(--bg-elev);border-top:1px solid var(--line);
+    margin:0 -20px;padding:10px 20px calc(env(safe-area-inset-bottom) + 14px);
+  }
+  .sheet.has-footer .sheet-submit{margin-top:0;}
+  .sheet.has-footer .sheet-cancel{margin-top:6px;}
   .sheet-handle{
     width:36px;height:4px;background:var(--line);border-radius:3px;margin:0 auto 16px;
   }
@@ -237,6 +249,7 @@
 
   /* Subtasks - main screen */
   .subtoggle-btn{background:var(--bg-elev-2);color:var(--ink-dim);box-shadow:none;}
+  .subtoggle-btn:active{background:var(--line);}
   .subtoggle-btn svg{transition:transform 0.25s ease;}
   .goal.sub-expanded .subtoggle-btn svg{transform:rotate(180deg);}
   .subtask-list{
@@ -255,11 +268,12 @@
   .subtask-stats{font-size:0.72rem;color:var(--ink-faint);margin-top:4px;font-family:"SF Mono",ui-monospace,Menlo,monospace;}
   .subquickadd-btn{
     flex-shrink:0;width:34px;height:34px;border-radius:50%;
-    background:#4C9A5B;color:#fff;border:none;font-size:1.2rem;font-weight:700;
+    background:var(--sub);color:#fff;border:none;font-size:1.2rem;font-weight:700;
     display:flex;align-items:center;justify-content:center;
   }
-  .subquickadd-btn:active{background:#428650;}
+  .subquickadd-btn:active{background:var(--sub-press);}
   .microtoggle-btn{background:var(--bg-elev-2);color:var(--ink-dim);}
+  .microtoggle-btn:active{background:var(--line);}
   .microtoggle-btn svg{transition:transform 0.25s ease;}
   .subtask-row-wrap.micro-expanded .microtoggle-btn svg{transform:rotate(180deg);}
 
@@ -279,21 +293,21 @@
   .microtask-stats{font-size:0.68rem;color:var(--ink-faint);margin-top:3px;font-family:"SF Mono",ui-monospace,Menlo,monospace;}
   .microquickadd-btn{
     flex-shrink:0;width:27px;height:27px;border-radius:50%;
-    background:#4C9A5B;color:#fff;border:none;font-size:1rem;font-weight:700;
+    background:var(--micro);color:#fff;border:none;font-size:1rem;font-weight:700;
     display:flex;align-items:center;justify-content:center;
   }
-  .microquickadd-btn:active{background:#428650;}
+  .microquickadd-btn:active{background:var(--micro-press);}
 
   /* Subtask summary cards - inside Goal sheet */
   .subtask-summary-card{
-    background:var(--bg-elev-2);border:1px solid var(--line);border-radius:var(--radius-sm);
+    background:var(--bg-elev-2);border:1px solid var(--line);border-left:3px solid var(--sub);border-radius:var(--radius-sm);
     padding:10px 12px;margin-top:10px;
   }
   .subtask-summary-top{display:flex;justify-content:space-between;align-items:center;gap:8px;}
   .subtask-summary-name{font-weight:600;font-size:0.9rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink);}
   .subtask-summary-meta{font-size:0.76rem;color:var(--ink-faint);margin-top:4px;font-family:"SF Mono",ui-monospace,Menlo,monospace;}
   .subtask-edit-btn{
-    margin-top:8px;width:100%;background:var(--bg-elev);border:1px solid var(--line);color:var(--accent);
+    margin-top:8px;width:100%;background:var(--bg-elev);border:1px solid var(--line);color:var(--sub);
     padding:8px;border-radius:8px;font-weight:600;font-size:0.85rem;
   }
   .rm-btn{
@@ -301,20 +315,30 @@
     border:1px solid var(--line);color:var(--danger);font-size:1rem;
   }
   .subtask-add-btn{
-    margin-top:10px;width:100%;background:var(--bg-elev-2);border:1px dashed var(--line);color:var(--accent);
+    margin-top:10px;width:100%;background:var(--bg-elev-2);border:1px dashed var(--sub);color:var(--sub);
     padding:10px;border-radius:var(--radius-sm);font-weight:600;font-size:0.88rem;
   }
+  .micro-add-btn{border-color:var(--micro);color:var(--micro);}
+  #saveSubtaskBtn{background:var(--sub);color:#0E1A11;}
   .manual-field.disabled{opacity:0.4;pointer-events:none;}
 
-  /* Microtask editor cards - inside Subtask sheet */
-  .microtask-editor-card{
-    background:var(--bg-elev-2);border:1px solid var(--line);border-radius:var(--radius-sm);
-    padding:10px;margin-top:10px;
+  /* Microtask summary cards - inside Subtask sheet (blue) */
+  .microtask-summary-card{
+    background:var(--bg-elev-2);border:1px solid var(--line);border-left:3px solid var(--micro);border-radius:var(--radius-sm);
+    padding:10px 12px;margin-top:10px;
   }
-  .microtask-editor-row{display:flex;gap:8px;align-items:center;}
-  .microtask-editor-row input[type=text]{flex:1;}
-  .microtask-editor-fields{display:flex;gap:8px;margin-top:6px;}
-  .microtask-editor-fields input[type=number]{flex:1;min-width:0;}
+  .micro-edit-btn{
+    margin-top:8px;width:100%;background:var(--bg-elev);border:1px solid var(--line);color:var(--micro);
+    padding:8px;border-radius:8px;font-weight:600;font-size:0.85rem;
+  }
+  #saveMicrotaskBtn{background:var(--micro);color:#fff;}
+
+  /* Each level's sheet gets its own accent so it's obvious which one you're in */
+  #goalSheet{border-top:3px solid var(--accent);}
+  #subtaskSheet{border-top:3px solid var(--sub);}
+  #microtaskSheet{border-top:3px solid var(--micro);}
+  #subtaskSheet input:focus{border-color:var(--sub);}
+  #microtaskSheet input:focus{border-color:var(--micro);}
 
   /* Archive sheet */
   .archive-item{
@@ -331,6 +355,24 @@
   .archive-item-actions .forget{color:var(--danger);}
   .archive-empty{color:var(--ink-faint);text-align:center;padding:30px 10px;font-size:0.88rem;}
 
+  /* In-app confirm dialog */
+  .confirm-overlay{
+    position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:40;
+    display:none;align-items:center;justify-content:center;padding:24px;
+  }
+  .confirm-overlay.open{display:flex;}
+  .confirm-box{
+    width:100%;max-width:340px;background:var(--bg-elev);border:1px solid var(--line);
+    border-radius:var(--radius);padding:20px;box-shadow:0 12px 40px rgba(0,0,0,0.5);
+  }
+  .confirm-msg{font-size:0.98rem;line-height:1.45;margin:0 0 18px;color:var(--ink);}
+  .confirm-btns{display:flex;gap:10px;}
+  .confirm-btns button{
+    flex:1;padding:13px;border-radius:var(--radius-sm);font-size:0.95rem;font-weight:700;border:1px solid var(--line);
+  }
+  #confirmCancel{background:var(--bg-elev-2);color:var(--ink-dim);}
+  #confirmOk{background:var(--danger);color:#fff;border-color:var(--danger);}
+
   /* Reorder sheet */
   .reorder-item{display:flex;align-items:center;gap:10px;padding:11px 0;border-top:1px solid var(--line);}
   .reorder-item:first-child{border-top:none;}
@@ -342,6 +384,8 @@
   }
   .reorder-btns button:disabled{opacity:0.3;}
   .reorder-btns button:not(:disabled):active{color:var(--accent);}
+  .reorder-btns button{display:flex;align-items:center;justify-content:center;}
+  .reorder-btns .del{color:var(--danger);}
 </style>
 </head>
 <body>
@@ -358,7 +402,7 @@
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
     </button>
     <div class="settings-panel" id="settingsPanel">
-      <button id="reorderBtn">Reorder categories</button>
+      <button id="reorderBtn">Manage categories</button>
       <button id="archiveViewBtn">View archive</button>
       <button id="exportBtn">Export backup</button>
       <button id="importBtn">Import backup</button>
@@ -377,9 +421,10 @@
 <div class="sheet-backdrop" id="backdrop"></div>
 
 <!-- Goal sheet -->
-<div class="sheet" id="goalSheet">
+<div class="sheet has-footer" id="goalSheet">
   <div class="sheet-handle"></div>
   <h3 id="goalSheetTitle">New Goal</h3>
+  <div class="sheet-body">
   <input type="text" id="goalName" placeholder="Name" maxlength="60">
   <div class="row2">
     <div class="manual-field" id="currentFieldWrap">
@@ -398,14 +443,18 @@
   <div id="subtaskEditorList"></div>
   <button type="button" class="subtask-add-btn" id="addSubtaskBtn">+ Add subtask</button>
 
-  <button class="sheet-submit" id="saveGoalBtn">Save Goal</button>
-  <button class="sheet-cancel" id="cancelGoalBtn">Cancel</button>
+  </div>
+  <div class="sheet-footer">
+    <button class="sheet-submit" id="saveGoalBtn">Save Goal</button>
+    <button class="sheet-cancel" id="cancelGoalBtn">Cancel</button>
+  </div>
 </div>
 
 <!-- Subtask sheet (stacks on top of Goal sheet) -->
-<div class="sheet" id="subtaskSheet">
+<div class="sheet has-footer" id="subtaskSheet">
   <div class="sheet-handle"></div>
   <h3>Edit Subtask</h3>
+  <div class="sheet-body">
   <input type="text" id="subName" placeholder="Name" maxlength="60">
   <div class="row2">
     <div class="manual-field" id="subCurrentFieldWrap">
@@ -419,16 +468,41 @@
 
   <label>Microtasks (optional)</label>
   <div id="microtaskEditorList"></div>
-  <button type="button" class="subtask-add-btn" id="addMicrotaskBtn">+ Add microtask</button>
+  <button type="button" class="subtask-add-btn micro-add-btn" id="addMicrotaskBtn">+ Add microtask</button>
 
-  <button class="sheet-submit" id="saveSubtaskBtn">Save Subtask</button>
-  <button class="sheet-cancel" id="cancelSubtaskBtn">Cancel</button>
+  </div>
+  <div class="sheet-footer">
+    <button class="sheet-submit" id="saveSubtaskBtn">Save Subtask</button>
+    <button class="sheet-cancel" id="cancelSubtaskBtn">Cancel</button>
+  </div>
+</div>
+
+<!-- Microtask sheet (stacks on top of Subtask sheet) -->
+<div class="sheet has-footer" id="microtaskSheet">
+  <div class="sheet-handle"></div>
+  <h3>Edit Microtask</h3>
+  <div class="sheet-body">
+  <input type="text" id="microName" placeholder="Name" maxlength="60">
+  <div class="row2">
+    <div>
+      <input type="number" id="microAmount" placeholder="Current" inputmode="decimal">
+    </div>
+    <div>
+      <input type="number" id="microMax" placeholder="Target" inputmode="decimal">
+    </div>
+  </div>
+  <input type="text" id="microUnit" placeholder="Label (optional)" maxlength="20" style="margin-top:10px;">
+  </div>
+  <div class="sheet-footer">
+    <button class="sheet-submit" id="saveMicrotaskBtn">Save Microtask</button>
+    <button class="sheet-cancel" id="cancelMicrotaskBtn">Cancel</button>
+  </div>
 </div>
 
 <!-- Category sheet -->
 <div class="sheet" id="catSheet">
   <div class="sheet-handle"></div>
-  <h3>New Category</h3>
+  <h3 id="catSheetTitle">New Category</h3>
   <label>Name</label>
   <input type="text" id="catName" placeholder="e.g. Savings" maxlength="30">
   <label>Color</label>
@@ -448,9 +522,19 @@
 <!-- Reorder sheet -->
 <div class="sheet" id="reorderSheet">
   <div class="sheet-handle"></div>
-  <h3>Reorder Categories</h3>
+  <h3>Manage Categories</h3>
   <div id="reorderList"></div>
   <button class="sheet-cancel" id="closeReorderBtn">Done</button>
+</div>
+
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <p class="confirm-msg" id="confirmMsg"></p>
+    <div class="confirm-btns">
+      <button type="button" id="confirmCancel">Cancel</button>
+      <button type="button" id="confirmOk">Delete</button>
+    </div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -460,7 +544,7 @@
   "use strict";
   const STORAGE_KEY = "progressTracker.v1";
   const COLLAPSE_KEY = "progressTracker.collapsed.v1";
-  const PALETTE = ["#D4A24C","#7A8B6F","#C0685A","#6B8CAE","#A47FB0","#B5A15A","#5FA8A0","#C98A5E"];
+  const PALETTE = ["#4FC3F7","#1E88E5","#AED581","#4CAF50","#FFF176","#FFCA28","#FF9800","#E53935","#F06292","#AB47BC","#673AB7","#7986CB","#E0E0E0"];
 
   let state = load();
   let collapsed = new Set(JSON.parse(localStorage.getItem(COLLAPSE_KEY) || "[]"));
@@ -468,6 +552,10 @@
   let microtasksExpanded = new Set();
   let editingGoalId = null;
   let editingSubtaskIndex = null;
+  let editingMicroIndex = null;
+  let microIsNew = false;
+  let subtaskIsNew = false;
+  let editingCategoryId = null;
   let pendingCategoryColor = PALETTE[0];
   let pendingSubtasks = [];
   let pendingMicrotasks = [];
@@ -512,6 +600,28 @@
     clearTimeout(toast._h);
     toast._h = setTimeout(()=>t.classList.remove('show'), 1800);
   }
+
+  // ---------- In-app confirm dialog (native confirm() is unreliable in home-screen apps) ----------
+  let confirmCb = null;
+  function askConfirm(message, onYes, okLabel){
+    confirmCb = onYes;
+    document.getElementById('confirmMsg').textContent = message;
+    document.getElementById('confirmOk').textContent = okLabel || 'Delete';
+    document.getElementById('confirmOverlay').classList.add('open');
+  }
+  function closeConfirm(){
+    document.getElementById('confirmOverlay').classList.remove('open');
+    confirmCb = null;
+  }
+  document.getElementById('confirmCancel').addEventListener('click', closeConfirm);
+  document.getElementById('confirmOverlay').addEventListener('click', (e)=>{
+    if(e.target.id === 'confirmOverlay') closeConfirm();
+  });
+  document.getElementById('confirmOk').addEventListener('click', ()=>{
+    const cb = confirmCb;
+    closeConfirm();
+    if(cb) cb();
+  });
 
   // ---------- Rendering ----------
   function render(){
@@ -765,9 +875,11 @@
   }
 
   function deleteGoal(id){
-    if(!confirm("Delete this goal?")) return;
-    state.goals = state.goals.filter(g=>g.id!==id);
-    save();
+    askConfirm("Delete this goal?", ()=>{
+      state.goals = state.goals.filter(g=>g.id!==id);
+      save();
+      toast("Goal deleted");
+    });
   }
 
   function archiveGoal(id){
@@ -786,10 +898,50 @@
     toast("Goal restored");
   }
   function deleteGoalForever(id){
-    if(!confirm("Permanently delete this goal? This can't be undone.")) return;
-    state.goals = state.goals.filter(g=>g.id!==id);
-    save();
-    renderArchive();
+    askConfirm("Permanently delete this goal? This can't be undone.", ()=>{
+      state.goals = state.goals.filter(g=>g.id!==id);
+      save();
+      renderArchive();
+      toast("Goal deleted");
+    });
+  }
+
+  const UNCAT_NAME = "Uncategorized";
+  const UNCAT_COLOR = "#E0E0E0";
+  function isUncat(c){ return c && c.name.trim().toLowerCase() === UNCAT_NAME.toLowerCase(); }
+
+  function deleteCategory(id){
+    const cat = state.categories.find(c=>c.id===id);
+    if(!cat) return;
+    const goals = state.goals.filter(g=>g.categoryId===id);
+    const archivedCount = goals.filter(g=>g.archived).length;
+    const n = goals.length;
+    const goalWord = `${n} goal${n===1?'':'s'}${archivedCount ? ` (incl. ${archivedCount} archived)` : ''}`;
+    // Deleting the Uncategorized bucket itself has nowhere to move goals, so they are deleted.
+    const moveToUncat = n > 0 && !isUncat(cat);
+    let msg;
+    if(n === 0) msg = `Delete the category "${cat.name}"?`;
+    else if(moveToUncat) msg = `Delete "${cat.name}"? Its ${goalWord} will be moved to "${UNCAT_NAME}".`;
+    else msg = `Delete "${cat.name}" and its ${goalWord}? This can't be undone.`;
+
+    askConfirm(msg, ()=>{
+      if(moveToUncat){
+        let target = state.categories.find(c=>c.id!==id && isUncat(c));
+        if(!target){
+          target = { id: uid(), name: UNCAT_NAME, color: UNCAT_COLOR };
+          state.categories.push(target);
+        }
+        state.goals.forEach(g=>{ if(g.categoryId===id) g.categoryId = target.id; });
+      } else {
+        state.goals = state.goals.filter(g=>g.categoryId!==id);
+      }
+      state.categories = state.categories.filter(c=>c.id!==id);
+      collapsed.delete(id);
+      saveCollapsed();
+      save();
+      renderReorderList();
+      toast(moveToUncat ? `Moved ${n} goal${n===1?'':'s'} to ${UNCAT_NAME}` : "Category deleted");
+    });
   }
 
   function moveCategory(id, dir){
@@ -807,6 +959,7 @@
   const backdrop = document.getElementById('backdrop');
   const goalSheet = document.getElementById('goalSheet');
   const subtaskSheet = document.getElementById('subtaskSheet');
+  const microtaskSheet = document.getElementById('microtaskSheet');
   const catSheet = document.getElementById('catSheet');
   const archiveSheet = document.getElementById('archiveSheet');
   const reorderSheet = document.getElementById('reorderSheet');
@@ -819,11 +972,14 @@
     backdrop.classList.remove('open');
     goalSheet.classList.remove('open');
     subtaskSheet.classList.remove('open');
+    microtaskSheet.classList.remove('open');
     catSheet.classList.remove('open');
     archiveSheet.classList.remove('open');
     reorderSheet.classList.remove('open');
     editingGoalId = null;
     editingSubtaskIndex = null;
+    editingMicroIndex = null;
+    editingCategoryId = null;
   }
   backdrop.addEventListener('click', closeSheets);
 
@@ -844,10 +1000,12 @@
     }).join('');
     box.querySelectorAll('.rm-btn').forEach(el=>{
       el.addEventListener('click', ()=>{
-        if(!confirm("Delete this subtask?")) return;
-        pendingSubtasks.splice(parseInt(el.dataset.idx, 10), 1);
-        renderSubtaskEditor();
-        updateManualFieldsState();
+        const i = parseInt(el.dataset.idx, 10);
+        askConfirm("Delete this subtask?", ()=>{
+          pendingSubtasks.splice(i, 1);
+          renderSubtaskEditor();
+          updateManualFieldsState();
+        });
       });
     });
     box.querySelectorAll('.subtask-edit-btn').forEach(el=>{
@@ -861,12 +1019,13 @@
     pendingSubtasks.push({ id: uid(), name: "", amount: 0, max: 0, unit: "", microtasks: [] });
     renderSubtaskEditor();
     updateManualFieldsState();
-    openSubtaskSheet(pendingSubtasks.length - 1);
+    openSubtaskSheet(pendingSubtasks.length - 1, true);
   });
 
   // ---------- Subtask sheet (name/current/target/unit + its own microtasks) ----------
-  function openSubtaskSheet(idx){
+  function openSubtaskSheet(idx, isNew){
     editingSubtaskIndex = idx;
+    subtaskIsNew = !!isNew;
     const s = pendingSubtasks[idx];
     document.getElementById('subName').value = s.name;
     document.getElementById('subAmount').value = s.amount || '';
@@ -880,17 +1039,28 @@
   }
   function closeSubtaskSheet(){
     subtaskSheet.classList.remove('open');
+    microtaskSheet.classList.remove('open');
     editingSubtaskIndex = null;
+    editingMicroIndex = null;
   }
-  document.getElementById('cancelSubtaskBtn').addEventListener('click', closeSubtaskSheet);
+  document.getElementById('cancelSubtaskBtn').addEventListener('click', ()=>{
+    if(subtaskIsNew && editingSubtaskIndex !== null){
+      pendingSubtasks.splice(editingSubtaskIndex, 1);
+      renderSubtaskEditor();
+      updateManualFieldsState();
+    }
+    closeSubtaskSheet();
+  });
   document.getElementById('saveSubtaskBtn').addEventListener('click', ()=>{
     const name = document.getElementById('subName').value.trim();
     const amount = parseFloat(document.getElementById('subAmount').value) || 0;
-    const max = parseFloat(document.getElementById('subMax').value) || 0;
+    const subMaxRaw = document.getElementById('subMax').value.trim();
+    const max = subMaxRaw === '' ? 1 : (parseFloat(subMaxRaw) || 0);
     const unit = document.getElementById('subUnit').value.trim();
     if(!name){ toast("Give it a name"); return; }
     if(max <= 0){ toast("Target must be more than 0"); return; }
     const microtasks = pendingMicrotasks
+      .map(m => ({ ...m, max: (m.max === null || m.max === undefined) ? 1 : m.max }))
       .filter(m => m.name && m.name.trim() && m.max > 0)
       .map(m => ({ id: m.id || uid(), name: m.name.trim(), amount: m.amount || 0, max: m.max, unit: (m.unit||'').trim() }));
     pendingSubtasks[editingSubtaskIndex] = {
@@ -901,54 +1071,80 @@
     closeSubtaskSheet();
   });
 
-  // ---------- Microtask editor (inline inside Subtask sheet) ----------
+  // ---------- Microtask list (summary cards inside Subtask sheet) ----------
   function renderMicrotaskEditor(){
     const box = document.getElementById('microtaskEditorList');
     box.innerHTML = pendingMicrotasks.map((m, idx) => `
-      <div class="microtask-editor-card">
-        <div class="microtask-editor-row">
-          <input type="text" class="micro-name-input" data-idx="${idx}" placeholder="Name" value="${escapeHtml(m.name)}" maxlength="60">
+      <div class="microtask-summary-card">
+        <div class="subtask-summary-top">
+          <div class="subtask-summary-name">${escapeHtml(m.name) || 'Untitled microtask'}</div>
           <button type="button" class="rm-btn micro-rm-btn" data-idx="${idx}">×</button>
         </div>
-        <div class="microtask-editor-fields">
-          <input type="number" class="micro-amount-input" data-idx="${idx}" placeholder="Current" inputmode="decimal" value="${m.amount || ''}">
-          <input type="number" class="micro-max-input" data-idx="${idx}" placeholder="Target" inputmode="decimal" value="${m.max || ''}">
-        </div>
-        <input type="text" class="micro-unit-input" data-idx="${idx}" placeholder="Label (optional)" value="${escapeHtml(m.unit||'')}" maxlength="20" style="margin-top:6px;">
+        <div class="subtask-summary-meta">${microtaskCounterText({ amount: m.amount, max: m.max || 0, unit: m.unit })}</div>
+        <button type="button" class="micro-edit-btn" data-idx="${idx}">Edit microtask</button>
       </div>
     `).join('');
-    box.querySelectorAll('.micro-name-input').forEach(el=>{
-      el.addEventListener('input', ()=>{ pendingMicrotasks[el.dataset.idx].name = el.value; });
-    });
-    box.querySelectorAll('.micro-amount-input').forEach(el=>{
-      el.addEventListener('input', ()=>{ pendingMicrotasks[el.dataset.idx].amount = parseFloat(el.value) || 0; });
-    });
-    box.querySelectorAll('.micro-max-input').forEach(el=>{
-      el.addEventListener('input', ()=>{ pendingMicrotasks[el.dataset.idx].max = parseFloat(el.value) || 0; });
-    });
-    box.querySelectorAll('.micro-unit-input').forEach(el=>{
-      el.addEventListener('input', ()=>{ pendingMicrotasks[el.dataset.idx].unit = el.value; });
+    box.querySelectorAll('.micro-edit-btn').forEach(el=>{
+      el.addEventListener('click', ()=> openMicrotaskSheet(parseInt(el.dataset.idx, 10), false));
     });
     box.querySelectorAll('.micro-rm-btn').forEach(el=>{
       el.addEventListener('click', ()=>{
-        if(!confirm("Delete this microtask?")) return;
-        pendingMicrotasks.splice(parseInt(el.dataset.idx, 10), 1);
-        renderMicrotaskEditor();
-        updateSubManualFieldsState();
+        const i = parseInt(el.dataset.idx, 10);
+        askConfirm("Delete this microtask?", ()=>{
+          pendingMicrotasks.splice(i, 1);
+          renderMicrotaskEditor();
+          updateSubManualFieldsState();
+        });
       });
     });
   }
+
+  // ---------- Microtask sheet (blue) ----------
+  function openMicrotaskSheet(idx, isNew){
+    editingMicroIndex = idx;
+    microIsNew = !!isNew;
+    const m = pendingMicrotasks[idx];
+    document.getElementById('microName').value = m.name || '';
+    document.getElementById('microAmount').value = m.amount || '';
+    document.getElementById('microMax').value = m.max || '';
+    document.getElementById('microUnit').value = m.unit || '';
+    microtaskSheet.classList.add('open');
+    setTimeout(()=>document.getElementById('microName').focus(), 300);
+  }
+  function closeMicrotaskSheet(){
+    microtaskSheet.classList.remove('open');
+    editingMicroIndex = null;
+  }
+  document.getElementById('cancelMicrotaskBtn').addEventListener('click', ()=>{
+    if(microIsNew && editingMicroIndex !== null){
+      pendingMicrotasks.splice(editingMicroIndex, 1);
+      renderMicrotaskEditor();
+      updateSubManualFieldsState();
+    }
+    closeMicrotaskSheet();
+  });
+  document.getElementById('saveMicrotaskBtn').addEventListener('click', ()=>{
+    const name = document.getElementById('microName').value.trim();
+    const amount = parseFloat(document.getElementById('microAmount').value) || 0;
+    const raw = document.getElementById('microMax').value.trim();
+    const max = raw === '' ? 1 : (parseFloat(raw) || 0);
+    const unit = document.getElementById('microUnit').value.trim();
+    if(!name){ toast("Give it a name"); return; }
+    if(max <= 0){ toast("Target must be more than 0"); return; }
+    pendingMicrotasks[editingMicroIndex] = { id: pendingMicrotasks[editingMicroIndex].id, name, amount, max, unit };
+    renderMicrotaskEditor();
+    updateSubManualFieldsState();
+    closeMicrotaskSheet();
+  });
+
   function updateSubManualFieldsState(){
     document.getElementById('subCurrentFieldWrap').classList.toggle('disabled', pendingMicrotasks.length > 0);
   }
   document.getElementById('addMicrotaskBtn').addEventListener('click', ()=>{
-    pendingMicrotasks.push({ id: uid(), name: "", amount: 0, max: 0, unit: "" });
+    pendingMicrotasks.push({ id: uid(), name: "", amount: 0, max: null, unit: "" });
     renderMicrotaskEditor();
     updateSubManualFieldsState();
-    setTimeout(()=>{
-      const inputs = document.querySelectorAll('.micro-name-input');
-      if(inputs.length) inputs[inputs.length-1].focus();
-    }, 50);
+    openMicrotaskSheet(pendingMicrotasks.length - 1, true);
   });
 
   function refreshCategorySelect(){
@@ -994,7 +1190,8 @@
   document.getElementById('saveGoalBtn').addEventListener('click', ()=>{
     const name = document.getElementById('goalName').value.trim();
     const amount = parseFloat(document.getElementById('goalAmount').value) || 0;
-    const max = parseFloat(document.getElementById('goalMax').value) || 0;
+    const goalMaxRaw = document.getElementById('goalMax').value.trim();
+    const max = goalMaxRaw === '' ? 1 : (parseFloat(goalMaxRaw) || 0);
     const unit = document.getElementById('goalUnit').value.trim();
     const categoryId = document.getElementById('goalCategory').value;
     if(!name){ toast("Give it a name"); return; }
@@ -1021,16 +1218,20 @@
     openCatSheet();
   });
 
-  function openCatSheet(){
-    document.getElementById('catName').value = "";
-    pendingCategoryColor = PALETTE[state.categories.length % PALETTE.length];
+  function openCatSheet(catId){
+    editingCategoryId = catId || null;
+    const cat = catId ? state.categories.find(c=>c.id===catId) : null;
+    document.getElementById('catSheetTitle').textContent = cat ? "Edit Category" : "New Category";
+    document.getElementById('catName').value = cat ? cat.name : "";
+    pendingCategoryColor = cat ? cat.color : PALETTE[state.categories.length % PALETTE.length];
     renderSwatches();
     openSheet(catSheet);
     setTimeout(()=>document.getElementById('catName').focus(), 300);
   }
   function renderSwatches(){
     const box = document.getElementById('swatches');
-    box.innerHTML = PALETTE.map(c=>`<span class="swatch ${c===pendingCategoryColor?'selected':''}" style="background:${c}" data-color="${c}"></span>`).join('');
+    const list = PALETTE.includes(pendingCategoryColor) ? PALETTE : [pendingCategoryColor, ...PALETTE];
+    box.innerHTML = list.map(c=>`<span class="swatch ${c===pendingCategoryColor?'selected':''}" style="background:${c}" data-color="${c}"></span>`).join('');
     box.querySelectorAll('.swatch').forEach(el=>{
       el.addEventListener('click', ()=>{
         pendingCategoryColor = el.getAttribute('data-color');
@@ -1039,13 +1240,18 @@
     });
   }
 
-  document.getElementById('newCatFab').addEventListener('click', openCatSheet);
+  document.getElementById('newCatFab').addEventListener('click', ()=>openCatSheet(null));
   document.getElementById('cancelCatBtn').addEventListener('click', closeSheets);
 
   document.getElementById('saveCatBtn').addEventListener('click', ()=>{
     const name = document.getElementById('catName').value.trim();
     if(!name){ toast("Give it a name"); return; }
-    state.categories.push({ id: uid(), name, color: pendingCategoryColor });
+    if(editingCategoryId){
+      const cat = state.categories.find(c=>c.id===editingCategoryId);
+      if(cat){ cat.name = name; cat.color = pendingCategoryColor; }
+    } else {
+      state.categories.push({ id: uid(), name, color: pendingCategoryColor });
+    }
     save();
     closeSheets();
   });
@@ -1101,6 +1307,10 @@
         <div class="reorder-btns">
           <button data-moveup="${c.id}" ${idx===0 ? 'disabled' : ''}>▲</button>
           <button data-movedown="${c.id}" ${idx===state.categories.length-1 ? 'disabled' : ''}>▼</button>
+          <button data-editcat="${c.id}" aria-label="Edit">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg>
+          </button>
+          <button class="del" data-delcat="${c.id}" aria-label="Delete">×</button>
         </div>
       </div>
     `).join('');
@@ -1109,6 +1319,12 @@
     });
     box.querySelectorAll('[data-movedown]').forEach(el=>{
       el.addEventListener('click', ()=> moveCategory(el.getAttribute('data-movedown'), 1));
+    });
+    box.querySelectorAll('[data-editcat]').forEach(el=>{
+      el.addEventListener('click', ()=>{ const id = el.getAttribute('data-editcat'); closeSheets(); openCatSheet(id); });
+    });
+    box.querySelectorAll('[data-delcat]').forEach(el=>{
+      el.addEventListener('click', ()=> deleteCategory(el.getAttribute('data-delcat')));
     });
   }
   document.getElementById('reorderBtn').addEventListener('click', ()=>{
@@ -1151,13 +1367,13 @@
       try{
         const data = JSON.parse(ev.target.result);
         if(!data.categories || !data.goals) throw new Error("bad format");
-        if(state.categories.length || state.goals.length){
-          if(!confirm("This replaces your current data with the backup. Continue?")) return;
-        }
         data.goals.forEach(normalizeGoal);
-        state = data;
-        save();
-        toast("Backup restored");
+        const apply = ()=>{ state = data; save(); toast("Backup restored"); };
+        if(state.categories.length || state.goals.length){
+          askConfirm("This replaces your current data with the backup. Continue?", apply, "Replace");
+        } else {
+          apply();
+        }
       }catch(err){
         toast("Couldn't read that file");
       }
@@ -1167,12 +1383,13 @@
   });
 
   document.getElementById('clearBtn').addEventListener('click', ()=>{
-    if(!confirm("Delete everything? This can't be undone.")) return;
-    state = { categories: [], goals: [] };
-    collapsed = new Set();
-    saveCollapsed();
-    save();
-    toast("All cleared");
+    askConfirm("Delete everything? This can't be undone.", ()=>{
+      state = { categories: [], goals: [] };
+      collapsed = new Set();
+      saveCollapsed();
+      save();
+      toast("All cleared");
+    }, "Delete all");
   });
 
   render();
